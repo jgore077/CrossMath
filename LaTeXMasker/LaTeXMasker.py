@@ -1,5 +1,5 @@
-from ReplaceLaTeXEquations import LaTeXReplacer
-from ReplaceDelimiterStrings import DelimterReplacer
+from .ReplaceLaTeXEquations import LaTeXReplacer
+from .ReplaceDelimiterStrings import DelimterReplacer
 
 class LaTeXMasker():
     def __init__(self) -> None:

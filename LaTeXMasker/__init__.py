@@ -1,1 +1,1 @@
-from LaTeXMasker import LaTeXMasker
+from .LaTeXMasker import LaTeXMasker

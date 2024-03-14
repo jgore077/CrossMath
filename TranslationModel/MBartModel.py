@@ -1,4 +1,4 @@
-from TranslationModelInterface import TranslationModelInterface,LanguageNotSupported
+from .TranslationModelInterface import TranslationModelInterface,LanguageNotSupported
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
 
 class MBartModel(TranslationModelInterface):
