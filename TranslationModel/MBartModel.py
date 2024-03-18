@@ -5,7 +5,7 @@ class MBartModel(TranslationModelInterface):
     def __init__(self):
         self.model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
         self.tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
-        with open('mbart_langs.txt','r') as mbart_langs:
+        with open('./mbart_langs.txt','r') as mbart_langs:
             self.supported_languages=mbart_langs.read().splitlines()
             
     def translate(self,text:str,iso639_1_from:str,iso639_1_to:str)->str:
