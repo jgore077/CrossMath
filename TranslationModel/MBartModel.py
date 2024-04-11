@@ -60,12 +60,20 @@ class MBartModel(TranslationModelInterface):
         "id_ID",
         "hr_HR",]
         self.abbreviated_lang_codes=[lang_code[:2] for lang_code in self.supported_languages]
+        self.parentLanguageDict = {"ca":"es", "kn":"hi", "pa":"hi", "sk":"cz"}
+        self.parentLanguageDictKeys=self.parentLanguageDict.keys()
+        
     def translate(self,text:str,iso639_1_from:str = None,iso639_1_to:str = 'en')->str:
         # Shortening the MBART language codes to iso639 codes
        
         if iso639_1_from==None:
             iso639_1_from=detect(text)
+         
+        if iso639_1_from in self.parentLanguageDictKeys:
+            iso639_1_from=self.parentLanguageDict[iso639_1_from]
             
+        if iso639_1_to in self.parentLanguageDictKeys:
+            iso639_1_to=self.parentLanguageDict[iso639_1_to]
      
         if len(iso639_1_from)>2:
             raise ValueError("Source Language Code Cannot Be More Than 2 Characters")
