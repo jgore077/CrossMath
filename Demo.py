@@ -1,3 +1,4 @@
+# coding=utf-8
 from langdetect import detect
 from LaTeXMasker import LaTeXMasker
 from TranslationModel import MBartModel
@@ -30,7 +31,8 @@ beginningStrings = [
 "论欧拉马斯切罗尼常数的非理性",
 "Sur l'irrationalité de la constante d'Euler Mascheroni",
 "Ho il seguente problema: Sia $|x_{n+1} - x_n| < 1/3^n$. Mostra che $(x_n)$ è una successione di Cauchy.",
-"Ich habe folgendes Problem: Sei $|x_{n+1} - x_n| < 1/3^n$. Zeige, dass $(x_n)$ eine Cauchy-Folge ist."
+"Ich habe folgendes Problem: Sei $|x_{n+1} - x_n| < 1/3^n$. Zeige, dass $(x_n)$ eine Cauchy-Folge ist.",
+"می‌خواهم مقدار عبارت زیر را پیدا کنم: $$ 5^{133} \mod 8. $$. متوجه شدم که   هنگامی که $n$ فرد است و در غیر اینصورت برابر 1 است، که من را به این نتیجه می‌رساند که $5^{133} \mod 8 = 5$ اما نمی‌دانم چگونه این را اثبات کنم. چگونه می‌توانم اثبات کنم که این اتفاق می‌افتد (یا اگر این اتفاق نمی‌افتد، راه‌حل دیگری را پیدا کنم)؟"
 ]
 
 # Iterate over our test strings

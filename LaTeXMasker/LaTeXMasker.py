@@ -1,6 +1,7 @@
 from .ReplaceLaTeXEquations import LaTeXReplacer
 from .ReplaceDelimiterStrings import DelimterReplacer
 
+
 class LaTeXMasker():
     def __init__(self) -> None:
         self.latex = LaTeXReplacer()
