@@ -68,6 +68,8 @@ class MBartModel(TranslationModelInterface):
        
         if iso639_1_from==None:
             iso639_1_from=detect(text)
+            if len(iso639_1_from)>2:
+                iso639_1_from=iso639_1_from[:2]
          
         if iso639_1_from in self.parentLanguageDictKeys:
             iso639_1_from=self.parentLanguageDict[iso639_1_from]
