@@ -19,15 +19,13 @@ with open("Math_Questions.tsv",encoding='utf-8') as fd:
         translator = pipeline('translation', model=model, tokenizer=tokenizer, src_lang='eng_Latn', tgt_lang=code, max_length = 1000,device=0)
         with open(f"datasets/{code}.tsv",'w',encoding='utf-8') as translated_set:
             for row in rows:
-                tags = row[3]
                 maskedSentence, unmaskDictionary = masker.Mask(row[1])
-                row[3] = masker.Unmask(translate(maskedSentence, translator), unmaskDictionary)
+                row[1] = masker.Unmask(translate(maskedSentence, translator), unmaskDictionary)
                 maskedSentence, unmaskDictionary = masker.Mask(row[2])
-                row.append(masker.Unmask(translate(maskedSentence, translator), unmaskDictionary))
-                row.append(tags)
+                row[2] = (masker.Unmask(translate(maskedSentence, translator), unmaskDictionary))
                 for i in range(1, len(row)):
                     row[i] = '\t' + row[i]
-                row[5] += '\n'
+                row[3] += '\n'
                 translated_set.writelines(row)
                 
 
