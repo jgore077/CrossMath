@@ -5,6 +5,7 @@ from TranslationModel import MBartModel
 mbart = MBartModel()
 masker = LaTeXMasker()
 
+result=mbart.translate(r"می‌خواهم مقدار عبارت زیر را پیدا کنم: $$ 5^{133} \mod 8. $$. متوجه شدم که   هنگامی که $n$ فرد است و در غیر اینصورت برابر 1 است، که من را به این نتیجه می‌رساند که $5^{133} \mod 8 = 5$ اما نمی‌دانم چگونه این را اثبات کنم. چگونه می‌توانم اثبات کنم که این اتفاق می‌افتد (یا اگر این اتفاق نمی‌افتد، راه‌حل دیگری را پیدا کنم)؟")
 # We have languages that are not supported that are regional dialects or descend from supported languages, so we covert
 # them to the parent language to attempt to translate.
 parentLanguageDict = {"ca":"es", "kn":"hi", "pa":"hi", "sk":"cz"}
@@ -36,7 +37,7 @@ beginningStrings = [
 for sentence in beginningStrings:
 
     # Mask out the LaTeX equations
-    maskedSentence, unmaskDictionary = masker.Mask(sentence)
+    maskedSentence, unmaskDictionary = masker.mask(sentence)
 
     # Show the initial sentence and its masked version, will be removed in production.
     print("initial:")
@@ -52,7 +53,7 @@ for sentence in beginningStrings:
 
     # Translate the masked sentence to English and unmask
     maskedTranslatedSentence = mbart.translate(maskedSentence, language, "en")
-    translatedSentence = masker.Unmask(maskedTranslatedSentence[0], unmaskDictionary)
+    translatedSentence = masker.unmask(maskedTranslatedSentence[0], unmaskDictionary)
 
     # This is a current issue we are working on diagnosing, as when certain strings are masked, the translation instead
     # outputs this phrase, but translates correctly when translating the unmasked version, so until the issue is solved

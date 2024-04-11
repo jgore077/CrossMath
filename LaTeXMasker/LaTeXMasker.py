@@ -6,8 +6,8 @@ class LaTeXMasker():
         self.latex = LaTeXReplacer()
         self.replacer = DelimterReplacer()
     
-    def Mask(self,incomingString : str):
+    def mask(self,incomingString : str):
         return self.latex.ReplaceEquations(incomingString)
     
-    def Unmask(self,incomingString : str, EquationSet : dict):
+    def unmask(self,incomingString : str, EquationSet : dict):
         return self.replacer.ReplaceDelimiters(incomingString,EquationSet)
