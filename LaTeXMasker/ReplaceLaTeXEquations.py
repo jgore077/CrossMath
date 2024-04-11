@@ -37,4 +37,3 @@ class LaTeXReplacer:
             i = i+1
 
         return incomingString, equations
-
