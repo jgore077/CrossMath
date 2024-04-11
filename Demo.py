@@ -5,7 +5,7 @@ from TranslationModel import MBartModel
 mbart = MBartModel()
 masker = LaTeXMasker()
 
-result=mbart.translate(r"می‌خواهم مقدار عبارت زیر را پیدا کنم: $$ 5^{133} \mod 8. $$. متوجه شدم که   هنگامی که $n$ فرد است و در غیر اینصورت برابر 1 است، که من را به این نتیجه می‌رساند که $5^{133} \mod 8 = 5$ اما نمی‌دانم چگونه این را اثبات کنم. چگونه می‌توانم اثبات کنم که این اتفاق می‌افتد (یا اگر این اتفاق نمی‌افتد، راه‌حل دیگری را پیدا کنم)؟")
+
 # We have languages that are not supported that are regional dialects or descend from supported languages, so we covert
 # them to the parent language to attempt to translate.
 parentLanguageDict = {"ca":"es", "kn":"hi", "pa":"hi", "sk":"cz"}
