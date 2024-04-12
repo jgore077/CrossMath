@@ -4,7 +4,7 @@ from langdetect import detect
 
 class MBartModel(TranslationModelInterface):
     def __init__(self):
-        self.model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+        self.model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt",device_map="cuda")
         self.tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
         self.supported_languages=[
         "ar_AR",
@@ -93,7 +93,7 @@ class MBartModel(TranslationModelInterface):
         self.tokenizer.src_lang=self.supported_languages[self.abbreviated_lang_codes.index(iso639_1_from)]
         
         
-        encoded_ar = self.tokenizer(text, return_tensors="pt")
+        encoded_ar = self.tokenizer(text, return_tensors="pt").to("cuda")
         
         generated_tokens = self.model.generate(
             **encoded_ar,
