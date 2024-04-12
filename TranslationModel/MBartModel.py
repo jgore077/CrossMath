@@ -1,6 +1,6 @@
 from .TranslationModelInterface import TranslationModelInterface,LanguageNotSupported
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
-from langdetect import detect
+from langdetect import detect_langs
 
 class MBartModel(TranslationModelInterface):
     def __init__(self):
@@ -62,15 +62,20 @@ class MBartModel(TranslationModelInterface):
         self.abbreviated_lang_codes=[lang_code[:2] for lang_code in self.supported_languages]
         self.parentLanguageDict = {"ca":"es", "kn":"hi", "pa":"hi", "sk":"cs"}
         self.parentLanguageDictKeys=self.parentLanguageDict.keys()
-        
+
     def translate(self,text:str,iso639_1_from:str = None,iso639_1_to:str = 'en')->str:
         # Shortening the MBART language codes to iso639 codes
-       
+
         if iso639_1_from==None:
-            iso639_1_from=detect(text)
-            if len(iso639_1_from)>2:
-                iso639_1_from=iso639_1_from[:2]
-         
+            possible_langs=detect_langs(text)
+            iso639_1_from=possible_langs[0]
+            for i in range(1, len(possible_langs)):
+                if iso639_1_from not in self.abbreviated_lang_codes:
+                    iso639_1_from = possible_langs[i]
+                else:
+                    if len(iso639_1_from) > 2:
+                        iso639_1_from = iso639_1_from[:2]
+
         if iso639_1_from in self.parentLanguageDictKeys:
             iso639_1_from=self.parentLanguageDict[iso639_1_from]
 
