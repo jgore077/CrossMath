@@ -3,7 +3,7 @@ from MaskedTranslationModel import MaskedTranslationModel
 
 
 # Declaration of our combined masking and translation model
-translater = MaskedTranslationModel()
+translater = MaskedTranslationModel('QZ',20)
 
 # Our test strings for this demo
 beginningStrings = [
