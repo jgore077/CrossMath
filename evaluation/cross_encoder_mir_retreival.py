@@ -5,10 +5,15 @@ To train the CrossEncoder, I will be using qrel for task 1. I consider the pairs
 file.
 """
 import csv
+import sys
+from pathlib import Path
+import os
+# Ensure evaluation code has access to loacl module `MaskedTranslationModel` in its parent directory
+sys.path.append(str(Path(f"{__file__}").parent.parent))
+from MaskedTranslationModel import MaskedTranslationModel
 import random
 import string
 from typing import re
-import os
 import bs4
 from sentence_transformers.cross_encoder.evaluation import CECorrelationEvaluator
 from torch.utils.data import DataLoader
@@ -17,25 +22,26 @@ from tqdm import tqdm
 from sentence_transformers import SentenceTransformer, SentencesDataset, InputExample, losses, util, models, evaluation
 from post_parser_record import PostParserRecord
 from sentence_transformers import InputExample, SentenceTransformer, losses, SentencesDataset
-
 from topic_file_reader import TopicReader
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-MODEL = "/mnt/netstore1_home/behrooz.mansouri/MiniLM_L6"#"model_qasim_rawtext_arqmath1T_rob_128_16"#"model_qasim_rawtext_arqmath1T_tiny_128_16"#model_qasim_rawtext_arqmath1T_tiny_256_16"
-FILE_Epochs = "roberta_Epoch_TSV"  # "epoch_final_diss_arqmath12_T__roberta_256_16"
 csv_writer_Epochs = None
-post_reader = PostParserRecord("Posts.V1.3.xml")
-
+# Script is intended to be ran from parent directory
+# post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
+post_reader=None
+translater=MaskedTranslationModel()
+resultsPath='evaluation/results/'
 
 def read_topic_files(sample_file_path):
-    topic_reader = TopicReader(sample_file_path)
     result = {}
-    for topic_id in topic_reader.map_topics:
-        title = str(topic_reader.map_topics[topic_id].title)
-        body = str(topic_reader.map_topics[topic_id].question)
-        title = title.strip()
-        body = body.strip()
-        result[topic_id] = title + " " + body  # (title, body)
+    with open(sample_file_path,'r',encoding='utf-8') as tsv:
+        for line in tsv.readlines():
+            fields=line.split('\t')
+            title=translater.translate(fields[1])
+            body=translater.translate(fields[2])
+            title = title.strip()
+            body = body.strip()
+            result[fields[0]] = title + " " + body  # (title, body)
     return result
 
 
@@ -75,20 +81,19 @@ def read_corpus(topic_tsv_path):
     return queries, candidates
 
 
-def retrieval():
+def retrieval(topics_tsv_path):
     embedder = CrossEncoder('cross-encoder/qnli-distilroberta-base')
     final_result = {}
     print("model loaded")
 
     "This is an important part"
-    queries, candidates = read_corpus()
+    queries, candidates = read_corpus(topics_tsv_path)
     print("corpus read")
     print("corpus encoded")
     for topic_id in queries:
         if topic_id not in candidates:
             continue
         query = queries[topic_id]
-
         result = {}
         for answer_id in candidates[topic_id]:
             answer = candidates[topic_id][answer_id]
@@ -100,10 +105,26 @@ def retrieval():
 
 
 def main():
-    final_result = retrieval()
-    with open("retrieval_result_distilroberta.tsv", mode='w', newline='') as csv_file:
-        csv_writer = csv.writer(csv_file, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    if not os.path.exists(resultsPath):
+        os.mkdir(resultsPath)
+    for file in os.listdir('datasets'):
+        name=file.split('.')[0]
+        final_result = retrieval(f'datasets/{file}')
+        cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
+        cfile2 = open(f"{resultsPath}/{name}_/retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
+        cfile3 = open(f"{resultsPath}/{name}_/retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
+
+        csv_writer1 = csv.writer(cfile1, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer2 = csv.writer(cfile2, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer3 = csv.writer(cfile3, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for topic_id in final_result:
+            topic_c = int(topic_id.split(".")[1])
+            if topic_c <=100:
+                csv_writer = csv_writer1
+            elif topic_c<=300:
+                csv_writer = csv_writer2
+            else:
+                csv_writer = csv_writer3
             result_map = final_result[topic_id]
             result_map = dict(sorted(result_map.items(), key=lambda item: item[1], reverse=True))
             rank = 1
@@ -113,6 +134,9 @@ def main():
                 rank += 1
                 if rank > 1000:
                     break
+        cfile1.close()
+        cfile2.close()
+        cfile3.close()
 
 
 if __name__ == '__main__':
