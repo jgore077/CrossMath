@@ -29,7 +29,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
 # Script is intended to be ran from parent directory
 post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
-translater=MaskedTranslationModel()
+translater=MaskedTranslationModel('QZ',20)
 resultsPath='evaluation/results/'
 
 def read_topic_files(sample_file_path):
