@@ -10,7 +10,7 @@ beginningStrings = [
 "Transformada de Fourier de función $1/ \\vert x \\vert$",
 "تبدیل فوریه تابع $1/ \\vert x \\vert$",
 "كيف يمكنني تقييم $\\sum_{n=0}^{\\infty}{\\frac{x^{kn}}{(kn)!}}$ حيث  $k$ عدد طبيعي؟",
-"Comment puis-je évaluer $\\sum_{n=0}^{\\infty}{\\frac{x^{kn}}{(kn)!}}$ où $k$  est un nombre naturel ?",
+"Comment puis-je évaluer $\\sum_{n=0}^{\\infty}{\\frac{x^{kn}}{(kn)!}}$ où $k$ est un nombre naturel ?",
 "Поиск положительных целочисленных решений уравнения $\\frac{4}{x}+\\frac{10}{y}=1$",
 "Die Suche nach positiven ganzzahligen Lösungen für $\\frac{4}{x}+\\frac{10}{y}=1$",
 "Trovare soluzioni intere positive per $\\frac{4}{x}+\\frac{10}{y}=1$",
