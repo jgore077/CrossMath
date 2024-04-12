@@ -107,9 +107,9 @@ def retrieval(topics_tsv_path):
 def main():
     if not os.path.exists(resultsPath):
         os.mkdir(resultsPath)
-    for file in os.listdir('datasets'):
+    for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
-        final_result = retrieval(f'datasets/{file}')
+        final_result = retrieval(f'datasetsTrimmed/{file}')
         cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
         cfile2 = open(f"{resultsPath}/{name}_/retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
         cfile3 = open(f"{resultsPath}/{name}_/retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
