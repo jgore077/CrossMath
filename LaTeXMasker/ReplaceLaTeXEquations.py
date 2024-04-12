@@ -15,7 +15,9 @@ class LaTeXReplacer:
         equations = {}
 
         # Perform our first search of the String for LaTeX in-line and display math equations
-        match = re.search(r'([\$]?\$[^\$]*\$[\$]?)', incomingString)
+        match = re.search(r'(\\\([^\$]*\\\))|([\$]?\$[^\$]*\$[\$]?)|(\\\[[^\$]*\\\])|'
+                          r'(\\begin{.*}[^\$]*\\end{.*})',
+                          incomingString)
 
         # If we find a match, enter the loop
         while match is not None:
@@ -31,7 +33,9 @@ class LaTeXReplacer:
 
             # Search the rest of the modified String for more in-line and display equations, if we find none, we break
             # the loop and return modified String and dictionary of delimiter Strings and equations.
-            match = re.search(r'([\$]?\$[^\$]*\$[\$]?)', incomingString)
+            match = re.search(r'(\\\([^\$]*\\\))|([\$]?\$[^\$]*\$[\$]?)|(\\\[[^\$]*\\\])|'
+                              r'(\\begin{.*}[^\$]*\\end{.*})',
+                              incomingString)
 
             # Enumerate
             i = i+1
