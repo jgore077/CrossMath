@@ -24,6 +24,7 @@ from post_parser_record import PostParserRecord
 from sentence_transformers import InputExample, SentenceTransformer, losses, SentencesDataset
 from topic_file_reader import TopicReader
 
+os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
 # Script is intended to be ran from parent directory
