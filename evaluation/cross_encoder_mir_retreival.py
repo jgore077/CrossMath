@@ -27,8 +27,7 @@ from topic_file_reader import TopicReader
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
 # Script is intended to be ran from parent directory
-# post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
-post_reader=None
+post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
 translater=MaskedTranslationModel()
 resultsPath='evaluation/results/'
 
