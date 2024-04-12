@@ -93,7 +93,7 @@ class MBartModel(TranslationModelInterface):
         self.tokenizer.src_lang=self.supported_languages[self.abbreviated_lang_codes.index(iso639_1_from)]
         
         
-        encoded_ar = self.tokenizer(text, return_tensors="pt").to("cuda")
+        encoded_ar = self.tokenizer(text, return_tensors="pt").to("cuda")   
         
         generated_tokens = self.model.generate(
             **encoded_ar,
