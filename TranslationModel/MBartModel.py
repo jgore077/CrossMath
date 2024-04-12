@@ -81,7 +81,7 @@ class MBartModel(TranslationModelInterface):
             raise ValueError("Source Language Code Cannot Be More Than 2 Characters")
         
         if iso639_1_from not in self.abbreviated_lang_codes:
-            raise LanguageNotSupported("Source Language Not Supported Or Language Code Does Not Exist")
+            raise LanguageNotSupported(f"Source Language Not Supported Or Language Code Does Not Exist\nCode:{iso639_1_from}\nSentence:{text}")
         
         if len(iso639_1_to)>2:
             raise ValueError("Translation Language Code Cannot Be More Than 2 Characters")
