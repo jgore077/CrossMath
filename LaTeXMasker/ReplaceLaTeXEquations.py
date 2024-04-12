@@ -8,7 +8,7 @@ class LaTeXReplacer:
     # This method takes in a String argument and find and replaces all LaTeX in-line and display math equations with
     # enumerated delimiter Strings and returns the modified String and a dictionary containing the
     # Delimiter String:Original Equation for replacing the Delimiter String after translation.
-    def ReplaceEquations(self, incomingString : str):
+    def replaceEquations(self, incomingString : str, delimiter: str):
 
         # Declare int for enumeration
         i = 1
@@ -24,10 +24,10 @@ class LaTeXReplacer:
             pattern = str(match.group())
 
             # Place match result into dictionary with delimiter String as the key
-            equations['XYZZYX'+str(i)] = pattern
+            equations[delimiter+str(i)] = pattern
 
             # Replace match result with delimiter String
-            incomingString = incomingString.replace(pattern, 'XYZZYX'+str(i))
+            incomingString = incomingString.replace(pattern, delimiter+str(i))
 
             # Search the rest of the modified String for more in-line and display equations, if we find none, we break
             # the loop and return modified String and dictionary of delimiter Strings and equations.

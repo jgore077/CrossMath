@@ -7,7 +7,7 @@ from TranslationModel import MBartModel
 class MaskedTranslationModel:
     
     def __init__(self) -> None:
-        self.masker= LaTeXMasker()
+        self.masker= LaTeXMasker('XYZZYX')
         self.translater = MBartModel()
     
     def translate(self,text:str,iso639_1_from:str = None,iso639_1_to:str = 'en'):

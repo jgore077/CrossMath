@@ -8,7 +8,7 @@ class DelimterReplacer:
     # Dictionary that contains the stripped out LaTeX equations and their Delimiter Strings that they have been replaced
     # with. The method then does a simple find and replace of all the Delimiter Strings to restore the original
     # equations into the translated String.
-    def ReplaceDelimiters(self, incomingString : str, EquationSet : dict):
+    def replaceDelimiters(self, incomingString : str, EquationSet : dict):
 
         # Loop over all keys in the Dictionary
         for key in EquationSet.keys():
