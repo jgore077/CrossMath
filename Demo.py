@@ -1,5 +1,3 @@
-
-
 # coding=utf-8
 from MaskedTranslationModel import MaskedTranslationModel
 
@@ -21,7 +19,10 @@ beginningStrings = [
 "Sur l'irrationalité de la constante d'Euler Mascheroni",
 "Ho il seguente problema: Sia $|x_{n+1} - x_n| < 1/3^n$. Mostra che $(x_n)$ è una successione di Cauchy.",
 "Ich habe folgendes Problem: Sei $|x_{n+1} - x_n| < 1/3^n$. Zeige, dass $(x_n)$ eine Cauchy-Folge ist.",
-"می‌خواهم مقدار عبارت زیر را پیدا کنم: $$ 5^{133} \mod 8. $$. متوجه شدم که   هنگامی که $n$ فرد است و در غیر اینصورت برابر 1 است، که من را به این نتیجه می‌رساند که $5^{133} \mod 8 = 5$ اما نمی‌دانم چگونه این را اثبات کنم. چگونه می‌توانم اثبات کنم که این اتفاق می‌افتد (یا اگر این اتفاق نمی‌افتد، راه‌حل دیگری را پیدا کنم)؟"
+"می‌خواهم مقدار عبارت زیر را پیدا کنم: $$ 5^{133} \mod 8. $$. متوجه شدم که   هنگامی که $n$ فرد است و در غیر اینصورت برابر 1 است، که من را به این نتیجه می‌رساند که $5^{133} \mod 8 = 5$ اما نمی‌دانم چگونه این را اثبات کنم. چگونه می‌توانم اثبات کنم که این اتفاق می‌افتد (یا اگر این اتفاق نمی‌افتد، راه‌حل دیگری را پیدا کنم)؟",
+"$\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?",
+"¿La $\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?",
+"什么是$\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?"
 ]
 
 # Iterate over our test strings

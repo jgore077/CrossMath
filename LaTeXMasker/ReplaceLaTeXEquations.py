@@ -24,10 +24,10 @@ class LaTeXReplacer:
             pattern = str(match.group())
 
             # Place match result into dictionary with delimiter String as the key
-            equations['XX'+str(i)] = pattern
+            equations['XYZZYX'+str(i)] = pattern
 
             # Replace match result with delimiter String
-            incomingString = incomingString.replace(pattern, 'XX'+str(i))
+            incomingString = incomingString.replace(pattern, 'XYZZYX'+str(i))
 
             # Search the rest of the modified String for more in-line and display equations, if we find none, we break
             # the loop and return modified String and dictionary of delimiter Strings and equations.
