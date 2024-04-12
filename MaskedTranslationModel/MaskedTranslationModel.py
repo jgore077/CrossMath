@@ -6,19 +6,19 @@ from TranslationModel import MBartModel
 
 class MaskedTranslationModel:
     
-    def __init__(self) -> None:
-        self.maskerString= 'QZ'
-        self.masker= LaTeXMasker(self.maskerString)
+    def __init__(self,delimiter:str,translationThreshold:int) -> None:
+        self.threshold=translationThreshold
+        self.masker= LaTeXMasker(delimiter)
         self.translater= MBartModel()
-        self.maskerRegexString= r'[¿\?\.,!0-9 ' + self.maskerString + r']*'
+        self.maskerRegexString= r'[¿\?\.,!0-9 ' + self.masker.delimiter + r']*'
     
     def translate(self,text:str,iso639_1_from:str = None,iso639_1_to:str = 'en'):
         maskedString,maskedDict= self.masker.mask(text)
         match= re.match(self.maskerRegexString, maskedString)
         if match.group() == "" or match.group() == "¿":
             translatedString= self.translater.translate(maskedString,iso639_1_from,iso639_1_to)
-            eStringMatch= re.search("[tT]he Committee recommends that the State party take all necessary measures to ensure", translatedString)
-            if eStringMatch is not None:
+            # This accounts for the case where the masked string produces an extremely long output which means it is unlikely to be correct
+            if len(translatedString)-len(text)>self.threshold:
                 translatedString= self.translater.translate(text, iso639_1_from, iso639_1_to)
             return self.masker.unmask(translatedString,maskedDict)
         return text
