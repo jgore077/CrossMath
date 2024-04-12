@@ -68,13 +68,14 @@ class MBartModel(TranslationModelInterface):
 
         if iso639_1_from==None:
             possible_langs=detect_langs(text)
-            iso639_1_from=possible_langs[0]
+            iso639_1_from=str(possible_langs[0].lang)
             for i in range(1, len(possible_langs)):
                 if iso639_1_from not in self.abbreviated_lang_codes:
-                    iso639_1_from = possible_langs[i]
+                    iso639_1_from = str(possible_langs[i].lang)
                 else:
-                    if len(iso639_1_from) > 2:
-                        iso639_1_from = iso639_1_from[:2]
+                    break
+            if len(iso639_1_from) > 2:
+                iso639_1_from = iso639_1_from[:2]
 
         if iso639_1_from in self.parentLanguageDictKeys:
             iso639_1_from=self.parentLanguageDict[iso639_1_from]
