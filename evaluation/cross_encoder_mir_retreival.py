@@ -37,6 +37,7 @@ def read_topic_files(sample_file_path):
     with open(sample_file_path,'r',encoding='utf-8') as tsv:
         for line in tsv.readlines():
             fields=line.split('\t')
+            print(fields[0])
             title=translater.translate(fields[1])
             body=translater.translate(fields[2])
             title = title.strip()
@@ -107,13 +108,16 @@ def retrieval(topics_tsv_path):
 def main():
     if not os.path.exists(resultsPath):
         os.mkdir(resultsPath)
+    existingResults=os.listdir(resultsPath)
     for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
+        if name in existingResults:
+            continue
+        print(f'Generating results for {name}')
         final_result = retrieval(f'datasetsTrimmed/{file}')
         cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
         cfile2 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
         cfile3 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
-
         csv_writer1 = csv.writer(cfile1, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer2 = csv.writer(cfile2, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer3 = csv.writer(cfile3, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
