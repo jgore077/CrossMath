@@ -111,8 +111,8 @@ def main():
         name=file.split('.')[0]
         final_result = retrieval(f'datasetsTrimmed/{file}')
         cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
-        cfile2 = open(f"{resultsPath}/{name}_/retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
-        cfile3 = open(f"{resultsPath}/{name}_/retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
+        cfile2 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
+        cfile3 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
 
         csv_writer1 = csv.writer(cfile1, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer2 = csv.writer(cfile2, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
