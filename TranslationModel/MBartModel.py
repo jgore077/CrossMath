@@ -60,7 +60,7 @@ class MBartModel(TranslationModelInterface):
         "id_ID",
         "hr_HR",]
         self.abbreviated_lang_codes=[lang_code[:2] for lang_code in self.supported_languages]
-        self.parentLanguageDict = {"ca":"es", "kn":"hi", "pa":"hi", "sk":"cs"}
+        self.parentLanguageDict = {"ca":"es", "kn":"hi", "pa":"hi", "sk":"cs", "sl":"cs"}
         self.parentLanguageDictKeys=self.parentLanguageDict.keys()
 
     def translate(self,text:str,iso639_1_from:str = None,iso639_1_to:str = 'en')->str:
@@ -68,6 +68,7 @@ class MBartModel(TranslationModelInterface):
 
         if iso639_1_from==None:
             possible_langs=detect_langs(text)
+            print(possible_langs)
             iso639_1_from=str(possible_langs[0].lang)
             iso639_1_from = iso639_1_from[:2]
             for i in range(1, len(possible_langs)):
@@ -77,6 +78,9 @@ class MBartModel(TranslationModelInterface):
                     iso639_1_from = str(possible_langs[i].lang)[:2]
                 else:
                     break
+
+        if iso639_1_from in self.parentLanguageDictKeys:
+            iso639_1_from = self.parentLanguageDict[iso639_1_from]
 
         if iso639_1_to in self.parentLanguageDictKeys:
             iso639_1_to=self.parentLanguageDict[iso639_1_to]
