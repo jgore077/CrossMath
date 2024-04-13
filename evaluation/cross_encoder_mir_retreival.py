@@ -111,7 +111,7 @@ def main():
     existingResults=os.listdir(resultsPath)
     for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
-        if name in existingResults:
+        if f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv" in existingResults:
             continue
         print(f'Generating results for {name}')
         final_result = retrieval(f'datasetsTrimmed/{file}')
