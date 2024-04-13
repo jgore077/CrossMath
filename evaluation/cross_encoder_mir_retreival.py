@@ -28,7 +28,7 @@ os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
 # Script is intended to be ran from parent directory
-# post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
+post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
 translater=MaskedTranslationModel('QZ',20)
 resultsPath='evaluation/results/'
 
@@ -106,14 +106,14 @@ def retrieval(topics_tsv_path):
 
 
 def main():
+    
     if not os.path.exists(resultsPath):
         os.mkdir(resultsPath)
     existingResults=os.listdir(resultsPath)
-    print(existingResults)
-    print(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv")
+ 
     for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
-        if f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv" in existingResults:
+        if file in existingResults:
             continue
         print(f'Generating results for {name}')
         final_result = retrieval(f'datasetsTrimmed/{file}')
