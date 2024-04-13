@@ -78,6 +78,9 @@ class MBartModel(TranslationModelInterface):
                 else:
                     break
 
+        if iso639_1_from in self.parentLanguageDictKeys:
+            iso639_1_from = self.parentLanguageDict[iso639_1_from]
+
         if iso639_1_to in self.parentLanguageDictKeys:
             iso639_1_to=self.parentLanguageDict[iso639_1_to]
      
