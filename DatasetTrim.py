@@ -8,7 +8,7 @@ for code in codes:
         rows = [row for row in rd]
         with open(f"datasetsTrimmed/{code}Trimmed.tsv", 'w', encoding='utf-8') as translated_set:
             for row in rows:
-                row[2] = row[2][:2000]
+                row[2] = row[2][:1651]
                 for i in range(1, len(row)):
                     row[i] = '\t' + row[i]
                 row[3] += '\n'
