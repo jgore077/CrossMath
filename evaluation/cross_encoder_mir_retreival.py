@@ -113,7 +113,7 @@ def main():
  
     for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
-        if file in existingResults:
+        if f"{name}_retrieval_result_distilroberta_a3.tsv" in existingResults:
             continue
         print(f'Generating results for {name}')
         final_result = retrieval(f'datasetsTrimmed/{file}')
