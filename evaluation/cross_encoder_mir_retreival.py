@@ -25,7 +25,7 @@ from sentence_transformers import InputExample, SentenceTransformer, losses, Sen
 from topic_file_reader import TopicReader
 
 lang_codes = ["cs", "hi", "hr", "ne", "fa", "es", "zh"]
-index = 0
+index = -1
 
 os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -115,11 +115,11 @@ def main():
 
     for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
+        index=index+1
         if f"{name}_retrieval_result_distilroberta_a3.tsv" in existingResults:
             continue
         print(f'Generating results for {name}')
         final_result = retrieval(f'datasetsTrimmed/{file}')
-        index=index+1
         cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
         cfile2 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
         cfile3 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
