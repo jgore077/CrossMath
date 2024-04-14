@@ -24,20 +24,33 @@ from post_parser_record import PostParserRecord
 from sentence_transformers import InputExample, SentenceTransformer, losses, SentencesDataset
 from topic_file_reader import TopicReader
 
+globalLanguageCodeDictionary={
+    "datasets/ces_Latn.tsv":"cs",
+    "datasets/hin_Deva.tsv":"hi",
+    "datasets/hrv_Latn.tsv":"hr",
+    "datasets/npi_Deva.tsv":"ne",
+    "datasets/pes_Arab.tsv":"fa",
+    "datasets/spa_Latn.tsv":"es",
+    "datasets/zho_Hans.tsv":"zh"
+}
+
+os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
 # Script is intended to be ran from parent directory
 post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
-translater=MaskedTranslationModel()
+translater=MaskedTranslationModel('QZ',20)
 resultsPath='evaluation/results/'
 
 def read_topic_files(sample_file_path):
     result = {}
+    lang_code=globalLanguageCodeDictionary.get(sample_file_path)
     with open(sample_file_path,'r',encoding='utf-8') as tsv:
         for line in tsv.readlines():
             fields=line.split('\t')
-            title=translater.translate(fields[1])
-            body=translater.translate(fields[2])
+            print(fields[0])
+            title=translater.translate(fields[1], lang_code)
+            body=translater.translate(fields[2], lang_code)
             title = title.strip()
             body = body.strip()
             result[fields[0]] = title + " " + body  # (title, body)
@@ -108,6 +121,7 @@ def main():
         os.mkdir(resultsPath)
     for file in os.listdir('datasets'):
         name=file.split('.')[0]
+        print(f'Generating results for {name}')
         final_result = retrieval(f'datasets/{file}')
         cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
         cfile2 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
