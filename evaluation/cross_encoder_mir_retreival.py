@@ -27,11 +27,12 @@ from topic_file_reader import TopicReader
 lang_codes = ["cs", "hi", "hr", "ne", "fa", "es", "zh"]
 index = 0
 
+os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
 # Script is intended to be ran from parent directory
 post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
-translater=MaskedTranslationModel()
+translater=MaskedTranslationModel('QZ',20)
 resultsPath='evaluation/results/'
 
 def read_topic_files(sample_file_path):
@@ -39,6 +40,7 @@ def read_topic_files(sample_file_path):
     with open(sample_file_path,'r',encoding='utf-8') as tsv:
         for line in tsv.readlines():
             fields=line.split('\t')
+            print(fields[0])
             title=translater.translate(fields[1], lang_codes[index])
             body=translater.translate(fields[2], lang_codes[index])
             title = title.strip()
@@ -109,9 +111,14 @@ def retrieval(topics_tsv_path):
 def main():
     if not os.path.exists(resultsPath):
         os.mkdir(resultsPath)
-    for file in os.listdir('datasets'):
+    existingResults = os.listdir(resultsPath)
+
+    for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
-        final_result = retrieval(f'datasets/{file}')
+        if f"{name}_retrieval_result_distilroberta_a3.tsv" in existingResults:
+            continue
+        print(f'Generating results for {name}')
+        final_result = retrieval(f'datasetsTrimmed/{file}')
         index=index+1
         cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
         cfile2 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
