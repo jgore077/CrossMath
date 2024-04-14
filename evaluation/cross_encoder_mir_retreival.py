@@ -25,13 +25,13 @@ from sentence_transformers import InputExample, SentenceTransformer, losses, Sen
 from topic_file_reader import TopicReader
 
 globalLanguageCodeDictionary={
-    "datasetsTrimmed/ces_Latn.tsv":"cs",
-    "datasetsTrimmed/hin_Deva.tsv":"hi",
-    "datasetsTrimmed/hrv_Latn.tsv":"hr",
-    "datasetsTrimmed/npi_Deva.tsv":"ne",
-    "datasetsTrimmed/pes_Arab.tsv":"fa",
-    "datasetsTrimmed/spa_Latn.tsv":"es",
-    "datasetsTrimmed/zho_Hans.tsv":"zh"
+    "datasetsTrimmed/ces_LatnTrimmed.tsv":"cs",
+    "datasetsTrimmed/hin_DevaTrimmed.tsv":"hi",
+    "datasetsTrimmed/hrv_LatnTrimmed.tsv":"hr",
+    "datasetsTrimmed/npi_DevaTrimmed.tsv":"ne",
+    "datasetsTrimmed/pes_ArabTrimmed.tsv":"fa",
+    "datasetsTrimmed/spa_LatnTrimmed.tsv":"es",
+    "datasetsTrimmed/zho_HansTrimmed.tsv":"zh"
 }
 
 os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
