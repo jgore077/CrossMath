@@ -49,8 +49,8 @@ def read_topic_files(sample_file_path):
         for line in tsv.readlines():
             fields=line.split('\t')
             print(fields[0])
-            title=translater.translate(fields[1], lang_code)
-            body=translater.translate(fields[2], lang_code)
+            title=translater.translate(fields[1], iso639_1_from=lang_code)
+            body=translater.translate(fields[2], iso639_1_from=lang_code)
             title = title.strip()
             body = body.strip()
             result[fields[0]] = title + " " + body  # (title, body)
