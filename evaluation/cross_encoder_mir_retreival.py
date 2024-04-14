@@ -24,8 +24,15 @@ from post_parser_record import PostParserRecord
 from sentence_transformers import InputExample, SentenceTransformer, losses, SentencesDataset
 from topic_file_reader import TopicReader
 
-lang_codes = ["cs", "hi", "hr", "ne", "fa", "es", "zh"]
-index = -1
+globalLanguageCodeDictionary={
+    "datasetsTrimmed/ces_Latn.tsv":"cs",
+    "datasetsTrimmed/hin_Deva.tsv":"hi",
+    "datasetsTrimmed/hrv_Latn.tsv":"hr",
+    "datasetsTrimmed/npi_Deva.tsv":"ne",
+    "datasetsTrimmed/pes_Arab.tsv":"fa",
+    "datasetsTrimmed/spa_Latn.tsv":"es",
+    "datasetsTrimmed/zho_Hans.tsv":"zh"
+}
 
 os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -37,12 +44,13 @@ resultsPath='evaluation/results/'
 
 def read_topic_files(sample_file_path):
     result = {}
+    lang_code=globalLanguageCodeDictionary.get(sample_file_path)
     with open(sample_file_path,'r',encoding='utf-8') as tsv:
         for line in tsv.readlines():
             fields=line.split('\t')
             print(fields[0])
-            title=translater.translate(fields[1], lang_codes[index])
-            body=translater.translate(fields[2], lang_codes[index])
+            title=translater.translate(fields[1], lang_code)
+            body=translater.translate(fields[2], lang_code)
             title = title.strip()
             body = body.strip()
             result[fields[0]] = title + " " + body  # (title, body)
@@ -115,7 +123,6 @@ def main():
 
     for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
-        index=index+1
         if f"{name}_retrieval_result_distilroberta_a3.tsv" in existingResults:
             continue
         print(f'Generating results for {name}')
