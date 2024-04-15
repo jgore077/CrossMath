@@ -36,5 +36,5 @@ with open("Math_Questions.tsv", encoding='utf-8') as fd:
                     translatedRow[i] = '\t' + translatedRow[i]
                 translatedRow[3] += '\n'
                 translated_set.writelines(row)
-
+                translated_set.writelines(translatedRow)
 
