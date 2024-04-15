@@ -2,7 +2,7 @@ from LaTeXMasker import LaTeXMasker
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import csv
 
-masker = LaTeXMasker()
+masker = LaTeXMasker('XX')
 model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M")
 tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M")
 
@@ -24,10 +24,10 @@ with open("Math_Questions.tsv", encoding='utf-8') as fd:
         with open(f"datasets/{code}.tsv", 'w', encoding='utf-8') as translated_set:
             for row in rows:
                 translatedRow = [row[0]]
-                maskedSentence, unmaskDictionary = masker.Mask(row[1])
-                translatedRow.append(masker.Unmask(translate(maskedSentence, translator), unmaskDictionary))
-                maskedSentence, unmaskDictionary = masker.Mask(row[2])
-                translatedRow.append(masker.Unmask(translate(maskedSentence, translator), unmaskDictionary))
+                maskedSentence, unmaskDictionary = masker.mask(row[1])
+                translatedRow.append(masker.unmask(translate(maskedSentence, translator), unmaskDictionary))
+                maskedSentence, unmaskDictionary = masker.mask(row[2])
+                translatedRow.append(masker.unmask(translate(maskedSentence, translator), unmaskDictionary))
                 translatedRow.append(row[3])
                 for i in range(1, len(row)):
                     row[i] = '\t' + row[i]
