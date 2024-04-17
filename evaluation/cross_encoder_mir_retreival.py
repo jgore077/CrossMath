@@ -74,11 +74,11 @@ def read_qrel_files(candidate_answer_file):
 def read_corpus(topic_tsv_path):
     candidates = {}
     queries = read_topic_files(topic_tsv_path)
-    candidate_answer_file = "evaluation/qrel_task1_2020.tsv"
+    candidate_answer_file = "evaluation/qrels/qrel_task1_2020.tsv"
     dic_candidates = read_qrel_files(candidate_answer_file)
-    candidate_answer_file = "evaluation/qrel_task1_2021.tsv"
+    candidate_answer_file = "evaluation/qrels/qrel_task1_2021.tsv"
     dic_candidates.update(read_qrel_files(candidate_answer_file))
-    candidate_answer_file = "evaluation/qrel_task1_2022.tsv"
+    candidate_answer_file = "evaluation/qrels/qrel_task1_2022.tsv"
     dic_candidates.update(read_qrel_files(candidate_answer_file))
 
     for topic in dic_candidates:
