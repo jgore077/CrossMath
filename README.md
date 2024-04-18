@@ -12,3 +12,27 @@ Almost every file in this repository is meant to be ran on devices that have GPU
 # Scripts
 We have multiple scripts in this repository that were used at some point during the research. They are used to generate data, convert data formats, and evaluate results. I will desccribe what the most important scripts do and how to run them in this section.
 <hr/>
+
+
+## TranslatedDatasetGenerator
+
+```
+```
+
+## ReviewerDatasetGenerator
+
+```
+```
+
+## cross_encoder_mir_retreival.py
+
+```
+python evaluation/cross_encoder_mir_retreival.py
+```
+
+## ResultEvaluation.py
+This script evaluates the precision and NCDG (Normalized Cumulative Distribution Gain) of the output of cross_encoder_mir_retreival.py using the ranx library. It will print out the name of the dataset and its `precision@10`, `ndcg@10`, `ndcg@100`, `ndcg@1000`
+
+```
+python ResultEvaluation.py
+```
