@@ -24,6 +24,16 @@ from post_parser_record import PostParserRecord
 from sentence_transformers import InputExample, SentenceTransformer, losses, SentencesDataset
 from topic_file_reader import TopicReader
 
+globalLanguageCodeDictionary={
+    "datasetsTrimmed/ces_LatnTrimmed.tsv":"cs",
+    "datasetsTrimmed/hin_DevaTrimmed.tsv":"hi",
+    "datasetsTrimmed/hrv_LatnTrimmed.tsv":"hr",
+    "datasetsTrimmed/npi_DevaTrimmed.tsv":"ne",
+    "datasetsTrimmed/pes_ArabTrimmed.tsv":"fa",
+    "datasetsTrimmed/spa_LatnTrimmed.tsv":"es",
+    "datasetsTrimmed/zho_HansTrimmed.tsv":"zh"
+}
+
 os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
@@ -34,12 +44,15 @@ resultsPath='evaluation/results/'
 
 def read_topic_files(sample_file_path):
     result = {}
+    print("Filepath: " + sample_file_path)
+    lang_code=globalLanguageCodeDictionary.get(sample_file_path)
+    print("Lang code: " + lang_code)
     with open(sample_file_path,'r',encoding='utf-8') as tsv:
         for line in tsv.readlines():
             fields=line.split('\t')
             print(fields[0])
-            title=translater.translate(fields[1])
-            body=translater.translate(fields[2])
+            title=translater.translate(fields[1], iso639_1_from=lang_code)
+            body=translater.translate(fields[2], iso639_1_from=lang_code)
             title = title.strip()
             body = body.strip()
             result[fields[0]] = title + " " + body  # (title, body)
@@ -106,11 +119,10 @@ def retrieval(topics_tsv_path):
 
 
 def main():
-    
     if not os.path.exists(resultsPath):
         os.mkdir(resultsPath)
-    existingResults=os.listdir(resultsPath)
- 
+    existingResults = os.listdir(resultsPath)
+
     for file in os.listdir('datasetsTrimmed'):
         name=file.split('.')[0]
         if f"{name}_retrieval_result_distilroberta_a3.tsv" in existingResults:
@@ -120,6 +132,7 @@ def main():
         cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
         cfile2 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
         cfile3 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
+
         csv_writer1 = csv.writer(cfile1, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer2 = csv.writer(cfile2, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer3 = csv.writer(cfile3, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)

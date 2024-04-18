@@ -22,7 +22,10 @@ beginningStrings = [
 "می‌خواهم مقدار عبارت زیر را پیدا کنم: $$ 5^{133} \mod 8. $$. متوجه شدم که   هنگامی که $n$ فرد است و در غیر اینصورت برابر 1 است، که من را به این نتیجه می‌رساند که $5^{133} \mod 8 = 5$ اما نمی‌دانم چگونه این را اثبات کنم. چگونه می‌توانم اثبات کنم که این اتفاق می‌افتد (یا اگر این اتفاق نمی‌افتد، راه‌حل دیگری را پیدا کنم)؟",
 "$\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?",
 "¿La $\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?",
-"什么是$\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?"
+"什么是$\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?",
+"Kako izračunati ovaj kombinativni iznos?",
+"Imam suma $$\sum_{k=0}^{n} \binom{n}{k} k$$ znam da je rezultat $n 2^{n-1}$ ali ne znam kako doći do toga.",
+"Chcem vyriešiť túto rovnicu"
 ]
 
 # Iterate over our test strings
