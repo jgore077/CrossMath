@@ -14,14 +14,18 @@ We have multiple scripts in this repository that were used at some point during 
 <hr/>
 
 
-## TranslatedDatasetGenerator
+## TranslatedDatasetGenerator.py
+This script will generate the datasets in the format needed to run them through the cross_encoder_mir_retreival.py. You should not run this script if you intend to just go straight to the results as it will overwrite all of the human validated sets and negatively impact the score.
 
 ```
+python TranslatedDatasetGenerator.py
 ```
 
-## ReviewerDatasetGenerator
+## ReviewerDatasetGenerator.py
+This script was used to generate datasets for our reviewers. The original english sentence will be on the top line while the translated version will be on the bottom. It was done in this manner so that our validators could have a reference to what was translated. You shouldnt run this script if you intend to evaluate the results as it will also overwrite the human translations.
 
 ```
+python ReviewerDatasetGenerator.py
 ```
 
 ## cross_encoder_mir_retreival.py
