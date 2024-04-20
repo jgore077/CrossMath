@@ -29,5 +29,5 @@ class ResultEvaluation():
         
     
 if __name__=="__main__":
-    evalutor= ResultEvaluation('evaluation/results','evaluation/qrels','evaluation/ndcg',2)
-    evalutor.evaluate()
+    evaluator= ResultEvaluation('evaluation/results','evaluation/qrels','evaluation/ndcg',2)
+    evaluator.evaluate()
