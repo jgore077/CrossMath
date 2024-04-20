@@ -7,7 +7,7 @@ class ReviewerDatasetGenerator():
     def __init__(self):
         self.masker = LaTeXMasker('XX')
         self.model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M")
-        tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M")
+        self.tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M")
 
 
 
