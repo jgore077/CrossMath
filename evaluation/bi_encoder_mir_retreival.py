@@ -108,11 +108,11 @@ def retrieval(topics_tsv_path):
         if topic_id not in candidates:
             continue
         query = queries[topic_id]
-        query_embedding = model.encode(query)
+        query_embedding = embedder.encode(query)
         result = {}
         for answer_id in candidates[topic_id]:
             answer = candidates[topic_id][answer_id]
-            passage_embedding = model.encode([answer])
+            passage_embedding = embedder.encode([answer])
             # You might need to check this
             score = util.dot_score(query_embedding, passage_embedding)
             #score = scores[0]
