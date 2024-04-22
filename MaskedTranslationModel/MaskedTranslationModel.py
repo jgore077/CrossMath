@@ -3,23 +3,22 @@ from LaTeXMasker import LaTeXMasker
 from TranslationModel import MBartModel
 
 
-
 class MaskedTranslationModel:
     
     def __init__(self,delimiter:str,translationThreshold:int) -> None:
         self.threshold=translationThreshold
         self.masker= LaTeXMasker(delimiter)
-        self.translater= MBartModel()
+        self.translator= MBartModel()
         self.maskerRegexString= r'[¿\?\.,!0-9 ' + self.masker.delimiter + r']*'
     
     def translate(self,text:str,iso639_1_from:str = None,iso639_1_to:str = 'en'):
         maskedString,maskedDict= self.masker.mask(text)
         match= re.match(self.maskerRegexString, maskedString)
         if match.group() == "" or match.group() == "¿":
-            translatedString= self.translater.translate(maskedString,iso639_1_from,iso639_1_to)
+            translatedString= self.translator.translate(maskedString,iso639_1_from,iso639_1_to)
             # This accounts for the case where the masked string produces an extremely long output which means it is unlikely to be correct
             if len(translatedString)-len(text)>self.threshold:
-                translatedString= self.translater.translate(text, iso639_1_from, iso639_1_to)
+                translatedString= self.translator.translate(text, iso639_1_from, iso639_1_to)
             return self.masker.unmask(translatedString,maskedDict)
         return text
         
