@@ -21,7 +21,7 @@ from topic_file_reader import TopicReader
 
 class EncoderEvaluator():
     def __init__(self,translationModel:TranslationModelInterface,encoder:str,resultsPath):
-        self.resultsaPath=resultsPath
+        self.resultsPath=resultsPath
         self.post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
         self.model=translationModel
         self.encoderString=encoder
