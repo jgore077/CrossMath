@@ -52,7 +52,7 @@ class EncoderEvaluator():
                 result[fields[0]] = title + " " + body  # (title, body)
         return result
     
-    def read_qrel_files(candidate_answer_file):
+    def read_qrel_files(self,candidate_answer_file):
         map_formulas = {}
         with open(candidate_answer_file, encoding="utf-8") as csv_file:
             csv_reader = csv.reader(csv_file, delimiter='\t')
