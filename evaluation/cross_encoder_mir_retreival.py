@@ -10,7 +10,7 @@ from pathlib import Path
 import os
 # Ensure evaluation code has access to loacl module `MaskedTranslationModel` in its parent directory
 sys.path.append(str(Path(f"{__file__}").parent.parent))
-from MaskedTranslationModel import MaskedTranslationModel
+from MaskedTranslationModel import MaskedTranslationModel, NLLBMaskedTranslationModel
 import random
 import string
 from typing import re
@@ -24,7 +24,7 @@ from post_parser_record import PostParserRecord
 from sentence_transformers import InputExample, SentenceTransformer, losses, SentencesDataset
 from topic_file_reader import TopicReader
 
-globalLanguageCodeDictionary={
+globalLanguageCodeDictionaryBART={
     "datasets/ces_Latn.tsv":"cs",
     "datasets/hin_Deva.tsv":"hi",
     "datasets/hrv_Latn.tsv":"hr",
@@ -34,23 +34,49 @@ globalLanguageCodeDictionary={
     "datasets/zho_Hans.tsv":"zh"
 }
 
+globalLanguageCodeDictionaryNLLB={
+    "datasets/ces_Latn.tsv":"ces_Latn",
+    "datasets/hin_Deva.tsv":"hin_Deva",
+    "datasets/hrv_Latn.tsv":"hrv_Latn",
+    "datasets/npi_Deva.tsv":"npi_Deva",
+    "datasets/pes_Arab.tsv":"pes_Arab",
+    "datasets/spa_Latn.tsv":"spa_Latn",
+    "datasets/zho_Hans.tsv":"zho_Hans"
+}
+
 os.environ["PYTORCH_USE_CUDA_DSA"] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 csv_writer_Epochs = None
 # Script is intended to be ran from parent directory
 post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
-translater=MaskedTranslationModel('QZ',20)
+BARTModel=MaskedTranslationModel('QZ',20)
+NLLBModel=NLLBMaskedTranslationModel('QZ')
 resultsPath='evaluation/results/'
 
-def read_topic_files(sample_file_path):
+def read_topic_files_BART(sample_file_path):
     result = {}
-    lang_code=globalLanguageCodeDictionary.get(sample_file_path)
+    lang_code=globalLanguageCodeDictionaryBART.get(sample_file_path)
     with open(sample_file_path,'r',encoding='utf-8') as tsv:
         for line in tsv.readlines():
             fields=line.split('\t')
             print(fields[0])
-            title=translater.translate(fields[1], iso639_1_from=lang_code)
-            body=translater.translate(fields[2], iso639_1_from=lang_code)
+            title=BARTModel.translate(fields[1], iso639_1_from=lang_code)
+            body=BARTModel.translate(fields[2], iso639_1_from=lang_code)
+            title = title.strip()
+            body = body.strip()
+            result[fields[0]] = title + " " + body  # (title, body)
+    return result
+
+
+def read_topic_files_NLLB(sample_file_path):
+    result = {}
+    lang_code=globalLanguageCodeDictionaryNLLB.get(sample_file_path)
+    with open(sample_file_path,'r',encoding='utf-8') as tsv:
+        for line in tsv.readlines():
+            fields=line.split('\t')
+            print(fields[0])
+            title=NLLBModel.translate(fields[1], flores_from=lang_code)
+            body=NLLBModel.translate(fields[2], flores_from=lang_code)
             title = title.strip()
             body = body.strip()
             result[fields[0]] = title + " " + body  # (title, body)
@@ -71,9 +97,12 @@ def read_qrel_files(candidate_answer_file):
     return map_formulas
 
 
-def read_corpus(topic_tsv_path):
+def read_corpus(topic_tsv_path, model):
     candidates = {}
-    queries = read_topic_files(topic_tsv_path)
+    if model == "BART":
+        queries = read_topic_files_BART(topic_tsv_path)
+    if model == "NLLB":
+        queries = read_topic_files_NLLB(topic_tsv_path)
     candidate_answer_file = "evaluation/qrels/qrel_task1_2020.tsv"
     dic_candidates = read_qrel_files(candidate_answer_file)
     candidate_answer_file = "evaluation/qrels/qrel_task1_2021.tsv"
@@ -93,13 +122,13 @@ def read_corpus(topic_tsv_path):
     return queries, candidates
 
 
-def retrieval(topics_tsv_path):
+def retrieval(topics_tsv_path, model):
     embedder = CrossEncoder('cross-encoder/qnli-distilroberta-base')
     final_result = {}
     print("model loaded")
 
     "This is an important part"
-    queries, candidates = read_corpus(topics_tsv_path)
+    queries, candidates = read_corpus(topics_tsv_path, model)
     print("corpus read")
     print("corpus encoded")
     for topic_id in queries:
@@ -122,10 +151,12 @@ def main():
     for file in os.listdir('datasets'):
         name=file.split('.')[0]
         print(f'Generating results for {name}')
-        final_result = retrieval(f'datasets/{file}')
-        cfile1 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
-        cfile2 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
-        cfile3 = open(f"{resultsPath}/{name}_retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
+
+        # BART Model Translation
+        final_result = retrieval(f'datasets/{file}', "BART")
+        cfile1 = open(f"{resultsPath}/{name}_BART_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
+        cfile2 = open(f"{resultsPath}/{name}_BART_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
+        cfile3 = open(f"{resultsPath}/{name}_BART_retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
 
         csv_writer1 = csv.writer(cfile1, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer2 = csv.writer(cfile2, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -135,6 +166,36 @@ def main():
             if topic_c <=100:
                 csv_writer = csv_writer1
             elif topic_c<=300:
+                csv_writer = csv_writer2
+            else:
+                csv_writer = csv_writer3
+            result_map = final_result[topic_id]
+            result_map = dict(sorted(result_map.items(), key=lambda item: item[1], reverse=True))
+            rank = 1
+            for post_id in result_map:
+                score = result_map[post_id]
+                csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), "distilroberta_base"])
+                rank += 1
+                if rank > 1000:
+                    break
+        cfile1.close()
+        cfile2.close()
+        cfile3.close()
+
+        # NLLB Model Translation
+        final_result = retrieval(f'datasets/{file}', "NLLB")
+        cfile1 = open(f"{resultsPath}/{name}_NLLB_retrieval_result_distilroberta_a1.tsv", mode='w', newline='')
+        cfile2 = open(f"{resultsPath}/{name}_NLLB_retrieval_result_distilroberta_a2.tsv", mode='w', newline='')
+        cfile3 = open(f"{resultsPath}/{name}_NLLB_retrieval_result_distilroberta_a3.tsv", mode='w', newline='')
+
+        csv_writer1 = csv.writer(cfile1, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer2 = csv.writer(cfile2, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer3 = csv.writer(cfile3, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for topic_id in final_result:
+            topic_c = int(topic_id.split(".")[1])
+            if topic_c <= 100:
+                csv_writer = csv_writer1
+            elif topic_c <= 300:
                 csv_writer = csv_writer2
             else:
                 csv_writer = csv_writer3

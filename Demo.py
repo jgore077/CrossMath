@@ -1,9 +1,9 @@
 # coding=utf-8
-from MaskedTranslationModel import MaskedTranslationModel
-
+from MaskedTranslationModel import MaskedTranslationModel, NLLBMaskedTranslationModel
 
 # Declaration of our combined masking and translation model
-translater = MaskedTranslationModel('QZ',20)
+translator = MaskedTranslationModel('QZ',20)
+NLLBtranslator = NLLBMaskedTranslationModel.NLLBMaskedTranslationModel('QZ')
 
 # Our test strings for this demo
 beginningStrings = [
@@ -25,8 +25,31 @@ beginningStrings = [
 "什么是$\\frac{1}{\sqrt{-1}}=\\sqrt{-1}$?"
 ]
 
-# Iterate over our test strings
-for sentence in beginningStrings:    
-    translatedSentence = translater.translate(sentence) 
-    print(translatedSentence)
+lang_code = [
+    "spa_Latn",
+    "pes_Arab",
+    "arb_Arab",
+    "fra_Latn",
+    "rus_Cyrl",
+    "deu_Latn",
+    "ita_Latn",
+    "zho_Hans",
+    "zho_Hans",
+    "fra_Latn",
+    "ita_Latn",
+    "deu_Latn",
+    "pes_Arab",
+    "eng_Latn",
+    "spa_Latn",
+    "zho_Hans"
+]
 
+# Iterate over our test strings
+i=0
+for sentence in beginningStrings:    
+    translatedSentence = translator.translate(sentence)
+    print("BART\n" + str(translatedSentence))
+    print("\nNLLB" )
+    translatedSentence = NLLBtranslator.translate(sentence, flores_from=lang_code[i])
+    print(str(translatedSentence) + "\n")
+    i = i+1
