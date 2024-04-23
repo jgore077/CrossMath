@@ -25,7 +25,7 @@ class EncoderEvaluator():
         self.post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
         self.model=translationModel
         self.encoderString=encoder
-        self.encoder = SentenceTransformer(encoder)
+        self.encoder = SentenceTransformer(encoder) if self.encoderString=='sentence-transformers/all-mpnet-base-v2' else CrossEncoder(encoder)
         self.globalLanguageCodeDictionary={
             "datasets/ces_Latn.tsv":"cs",
             "datasets/hin_Deva.tsv":"hi",
