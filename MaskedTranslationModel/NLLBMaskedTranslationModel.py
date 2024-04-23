@@ -10,13 +10,13 @@ class NLLBMaskedTranslationModel:
         self.translator = NLLBModel()
         self.maskerRegexString = r'[¿\?\.,!0-9 ' + self.masker.delimiter + r']*'
 
-    def translate(self, text: str, flores_from: str = None, flores_to: str = 'eng_Latn'):
+    def translate(self, text: str, flores_from: str = None, iso639_1_from: str = None, flores_to: str = 'eng_Latn'):
         finalText = ""
         for excerpt in re.split(r"[.!?] ", text):
             maskedString, maskedDict = self.masker.mask(excerpt)
             match = re.match(self.maskerRegexString, maskedString)
             if match.group() == "" or match.group() == "¿":
-                translatedString = self.translator.translate(maskedString, flores_from, flores_to)
+                translatedString = self.translator.translate(maskedString, flores_from, iso639_1_from, flores_to)
                 finalText = finalText + str(self.masker.unmask(translatedString, maskedDict)) + " "
             else:
                 finalText = finalText + str(excerpt) + " "
