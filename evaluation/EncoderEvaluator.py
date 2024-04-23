@@ -153,5 +153,5 @@ if __name__=="__main__":
     mbartcross=EncoderEvaluator(MaskedTranslationModel('QZ',50),'cross-encoder/qnli-distilroberta-base','evaluation/mbartcross')
     mbartbi=EncoderEvaluator(MaskedTranslationModel('QZ',50),'sentence-transformers/all-mpnet-base-v2','evaluation/mbartbi')
 
-    nllbcross=EncoderEvaluator(NLLBMaskedTranslationModel(),'cross-encoder/qnli-distilroberta-base','evaluation/nllbcross')
-    nllbbi=EncoderEvaluator(NLLBMaskedTranslationModel(),'sentence-transformers/all-mpnet-base-v2','evaluation/nllbbi')
+    nllbcross=EncoderEvaluator(NLLBMaskedTranslationModel('QZ'),'cross-encoder/qnli-distilroberta-base','evaluation/nllbcross')
+    nllbbi=EncoderEvaluator(NLLBMaskedTranslationModel('QZ'),'sentence-transformers/all-mpnet-base-v2','evaluation/nllbbi')
