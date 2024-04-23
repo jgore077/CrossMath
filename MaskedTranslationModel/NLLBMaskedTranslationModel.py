@@ -7,7 +7,7 @@ class NLLBMaskedTranslationModel:
 
     def __init__(self, delimiter: str) -> None:
         self.masker = LaTeXMasker(delimiter)
-        self.translator = NLLBModel.NLLBModel()
+        self.translator = NLLBModel()
         self.maskerRegexString = r'[¿\?\.,!0-9 ' + self.masker.delimiter + r']*'
 
     def translate(self, text: str, flores_from: str = None, flores_to: str = 'eng_Latn'):

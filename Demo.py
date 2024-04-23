@@ -3,7 +3,7 @@ from MaskedTranslationModel import MaskedTranslationModel, NLLBMaskedTranslation
 
 # Declaration of our combined masking and translation model
 translator = MaskedTranslationModel('QZ',20)
-NLLBtranslator = NLLBMaskedTranslationModel.NLLBMaskedTranslationModel('QZ')
+NLLBtranslator =NLLBMaskedTranslationModel('QZ')
 
 # Our test strings for this demo
 beginningStrings = [

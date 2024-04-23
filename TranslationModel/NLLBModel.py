@@ -1,5 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from langdetect import detect
+from .TranslationModelInterface import TranslationModelInterface
 
 class NLLBModel(TranslationModelInterface):
 

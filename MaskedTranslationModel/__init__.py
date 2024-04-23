@@ -1,1 +1,2 @@
 from .MaskedTranslationModel import MaskedTranslationModel
+from .NLLBMaskedTranslationModel import NLLBMaskedTranslationModel
