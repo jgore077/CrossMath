@@ -47,7 +47,6 @@ class ResultEvaluation():
                 stat_test='student',
             ))
             
-        pass
         
     
 if __name__=="__main__":
