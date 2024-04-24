@@ -103,8 +103,7 @@ class EncoderEvaluator():
             result = {}
             for answer_id in candidates[topic_id]:
                 answer = candidates[topic_id][answer_id]
-                
-                score= util.dot_score(query_embedding, embedder.encode([answer])) if self.encoderString=='sentence-transformers/all-mpnet-base-v2' else  embedder.predict([(query, answer)])[0]
+                score= util.dot_score(query_embedding, embedder.encode([answer]))[0][0].item() if self.encoderString=='sentence-transformers/all-mpnet-base-v2' else  embedder.predict([(query, answer)])[0]
                 result[answer_id] = score
             final_result[topic_id] = result
         return final_result
@@ -140,7 +139,7 @@ class EncoderEvaluator():
                 rank = 1
                 for post_id in result_map:
                     score = result_map[post_id]
-                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), {self.encoderString.split('/')[1]}])
+                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), self.encoderString.split('/')[1]])
                     rank += 1
                     if rank > 1000:
                         break
