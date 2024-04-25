@@ -97,6 +97,10 @@ if __name__=="__main__":
     evaluator.evaluate('evaluation/nllbbi')
     evaluator.evaluate('evaluation/nllbcross')
     
+    print('English (Baseline)')
+    evaluator.compareRuns('eng_Latn')
+    print('Czech')
+    evaluator.compareRuns('ces_Latn')
     print('Czech')
     evaluator.compareRuns('ces_Latn')
     print('Croatian')
