@@ -20,8 +20,8 @@ from sentence_transformers import InputExample, SentenceTransformer, losses, Sen
 from topic_file_reader import TopicReader
 
 class EncoderEvaluator():
-    def __init__(self,translationModel:TranslationModelInterface,encoder:str,resultsPath,name):
-        self.name=name
+    def __init__(self,translationModel:TranslationModelInterface,encoder:str,resultsPath,translationModelName):
+        self.translationModelName=translationModelName
         self.resultsPath=resultsPath
         self.post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
         self.model=translationModel
@@ -120,9 +120,9 @@ class EncoderEvaluator():
             name=file.split('.')[0]
             print(f'Generating results for {name}')
             final_result = self.retrieval(f'datasets/{file}')
-            cfile1 = open(f"{self.resultsPath}/{name}_retrieval_result_{self.encoderString.split('/')[1]}_a1.tsv", mode='w', newline='')
-            cfile2 = open(f"{self.resultsPath}/{name}_retrieval_result_{self.encoderString.split('/')[1]}_a2.tsv", mode='w', newline='')
-            cfile3 = open(f"{self.resultsPath}/{name}_retrieval_result_{self.encoderString.split('/')[1]}_a3.tsv", mode='w', newline='')
+            cfile1 = open(f"{self.resultsPath}/{name}_retrieval_result_{self.translationModelName}-{self.encoderString.split('/')[1]}_a1.tsv", mode='w', newline='')
+            cfile2 = open(f"{self.resultsPath}/{name}_retrieval_result_{self.translationModelName}-{self.encoderString.split('/')[1]}_a2.tsv", mode='w', newline='')
+            cfile3 = open(f"{self.resultsPath}/{name}_retrieval_result_{self.translationModelName}-{self.encoderString.split('/')[1]}_a3.tsv", mode='w', newline='')
 
             csv_writer1 = csv.writer(cfile1, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             csv_writer2 = csv.writer(cfile2, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -140,7 +140,7 @@ class EncoderEvaluator():
                 rank = 1
                 for post_id in result_map:
                     score = result_map[post_id]
-                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), f'{self.name}-{self.encoderString.split('/')[1]}'])
+                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), f'{self.translationModelName}-{self.encoderString.split('/')[1]}'])
                     rank += 1
                     if rank > 1000:
                         break
