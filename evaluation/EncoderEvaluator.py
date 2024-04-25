@@ -141,7 +141,7 @@ class EncoderEvaluator():
                 rank = 1
                 for post_id in result_map:
                     score = result_map[post_id]
-                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), f'{self.translationModelName}-{self.encoderString.split('/')[1]}'])
+                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), f'{self.translationModelName}-{self.encoderString.split("/")[1]}'])
                     rank += 1
                     if rank > 1000:
                         break
