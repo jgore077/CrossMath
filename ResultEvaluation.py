@@ -1,9 +1,10 @@
 from ranx import Qrels, Run, evaluate, compare
 import os
+
 from pathlib import Path
 
 class ResultEvaluation():
-    def __init__(self,qrelsPath,ndcgPath,relevanceLevel) -> None:
+    def __init__(self,qrelsPath:str,ndcgPath:str,relevanceLevel:int=1) -> None:
         self.qrelsPath=qrelsPath
         self.qrelFiles=[f'{self.qrelsPath}/{file}' for file in os.listdir(self.qrelsPath)]
         # Used to correlate qrel sets with their respective ARQmath sets
@@ -18,7 +19,7 @@ class ResultEvaluation():
             
         }
         
-    def evaluate(self,resultsPath):
+    def evaluate(self,resultsPath:str):
         resultFiles=[f'{resultsPath}/{file}' for file in os.listdir(resultsPath)]
         qrelFiles=[f'{self.qrelsPath}/{file}' for file in os.listdir(self.qrelsPath)]
         for qrel in qrelFiles:
@@ -33,6 +34,7 @@ class ResultEvaluation():
                 print(result)
                 print(temp)
                 
+    # Deprecated but not removing as it provides some extra information
     def compareRuns(self,modelName:str,compareModel:str):
         keys=[key for key in self.runs.keys() if modelName in key]
         invertedQrelDict=dict((v, k) for k, v in self.qrelDict.items())
@@ -47,13 +49,30 @@ class ResultEvaluation():
                 stat_test='student',
             )
             print(result)
-            
+        
+    def compareRuns(self,floresCode:str)->None:
+        keys=[key for key in self.runs.keys() if floresCode in key]
+        invertedQrelDict=dict((v, k) for k, v in self.qrelDict.items())
+        invertedQrelDictKeys=invertedQrelDict.keys()
+        for arqMathCode in invertedQrelDictKeys:
+            test=[self.runs[key] for key in keys if arqMathCode in key]
+            qrel=Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[arqMathCode]}',kind="trec")
+            qrel.set_relevance_level(self.relevanceLevel)
+            result=compare(
+                qrels=qrel,
+                runs=[self.runs[key] for key in keys if arqMathCode in key],
+                metrics=["precision@10", "ndcg@10"],
+                max_p=0.05,
+                stat_test='student',
+            )
+            print(result)
+        
         
     
 if __name__=="__main__":
-    evaluator= ResultEvaluation('evaluation/qrels','evaluation/ndcg',1)
+    evaluator= ResultEvaluation('evaluation/qrels','evaluation/ndcg',relevanceLevel=2)
     evaluator.evaluate('evaluation/mbartbi')
     evaluator.evaluate('evaluation/mbartcross')
     evaluator.evaluate('evaluation/nllbbi')
     evaluator.evaluate('evaluation/nllbcross')
-    evaluator.compareRuns('evaluation/nllbbi','evaluation/mbartbi')
+    evaluator.compareRuns('ces_Latn')
