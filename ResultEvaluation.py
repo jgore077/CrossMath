@@ -29,7 +29,7 @@ class ResultEvaluation():
                 run = Run.from_file(result, kind="trec")
                 self.runs[result]=run
                 # The croatian results have a serious error within them, they are longer than other sets
-                temp = evaluate(qrels, run, ["precision@10","ndcg@10", "ndcg@100", "ndcg@1000"],make_comparable=True) # temp is a dictionary
+                temp = evaluate(qrels, run, ["precision@5","ndcg@5"],make_comparable=True) # temp is a dictionary
                 print(result)
                 print(temp)
                 
@@ -39,13 +39,14 @@ class ResultEvaluation():
         for key in keys:
             # print(f'{self.qrelsPath}/{invertedQrelDict[Path(key).stem[-2:]]}')
             # print(key,f'{compareModel}/{os.path.basename(key)}')
-            print(compare(
+            result=compare(
                 qrels=Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[Path(key).stem[-2:]]}',kind="trec"),
                 runs=[self.runs[key],self.runs[f'{compareModel}/{os.path.basename(key)}']],
                 metrics=["precision@10", "ndcg@10"],
                 max_p=0.05,
                 stat_test='student',
-            ))
+            )
+            print(result)
             
         
     
@@ -55,4 +56,4 @@ if __name__=="__main__":
     evaluator.evaluate('evaluation/mbartcross')
     evaluator.evaluate('evaluation/nllbbi')
     evaluator.evaluate('evaluation/nllbcross')
-    evaluator.compareRuns('evaluation/mbartbi','evaluation/nllbbi')
+    evaluator.compareRuns('evaluation/nllbbi','evaluation/mbartbi')
