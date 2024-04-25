@@ -20,7 +20,8 @@ from sentence_transformers import InputExample, SentenceTransformer, losses, Sen
 from topic_file_reader import TopicReader
 
 class EncoderEvaluator():
-    def __init__(self,translationModel:TranslationModelInterface,encoder:str,resultsPath):
+    def __init__(self,translationModel:TranslationModelInterface,encoder:str,resultsPath,name):
+        self.name=name
         self.resultsPath=resultsPath
         self.post_reader = PostParserRecord("evaluation/Posts.V1.3.xml")
         self.model=translationModel
@@ -139,7 +140,7 @@ class EncoderEvaluator():
                 rank = 1
                 for post_id in result_map:
                     score = result_map[post_id]
-                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), self.encoderString.split('/')[1]])
+                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), f'{self.name}-{self.encoderString.split('/')[1]}'])
                     rank += 1
                     if rank > 1000:
                         break
@@ -149,14 +150,14 @@ class EncoderEvaluator():
         
     
 if __name__=="__main__":
-    mbartcross=EncoderEvaluator(MaskedTranslationModel('QZ',50),'cross-encoder/qnli-distilroberta-base','evaluation/mbartcross')
+    mbartcross=EncoderEvaluator(MaskedTranslationModel('QZ',50),'cross-encoder/qnli-distilroberta-base','evaluation/mbartcross','mbart')
     mbartcross.main()
     
-    mbartbi=EncoderEvaluator(MaskedTranslationModel('QZ',50),'sentence-transformers/all-mpnet-base-v2','evaluation/mbartbi')
+    mbartbi=EncoderEvaluator(MaskedTranslationModel('QZ',50),'sentence-transformers/all-mpnet-base-v2','evaluation/mbartbi','mbart')
     mbartbi.main()
     
-    nllbcross=EncoderEvaluator(NLLBMaskedTranslationModel('QZ'),'cross-encoder/qnli-distilroberta-base','evaluation/nllbcross')
+    nllbcross=EncoderEvaluator(NLLBMaskedTranslationModel('QZ'),'cross-encoder/qnli-distilroberta-base','evaluation/nllbcross','nllb')
     nllbcross.main()
     
-    nllbbi=EncoderEvaluator(NLLBMaskedTranslationModel('QZ'),'sentence-transformers/all-mpnet-base-v2','evaluation/nllbbi')
+    nllbbi=EncoderEvaluator(NLLBMaskedTranslationModel('QZ'),'sentence-transformers/all-mpnet-base-v2','evaluation/nllbbi','nllb')
     nllbbi.main()
