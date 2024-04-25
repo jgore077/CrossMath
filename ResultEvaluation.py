@@ -75,4 +75,17 @@ if __name__=="__main__":
     evaluator.evaluate('evaluation/mbartcross')
     evaluator.evaluate('evaluation/nllbbi')
     evaluator.evaluate('evaluation/nllbcross')
+    
+    print('Czech')
     evaluator.compareRuns('ces_Latn')
+    print('Croatian')
+    evaluator.compareRuns('hrv_Latn')
+    print('Spanish')
+    evaluator.compareRuns('spa_Latn')
+    print('Farsi/Persian')
+    evaluator.compareRuns('pes_Arab')
+    print('Nepali')
+    evaluator.compareRuns('npi_Deva')
+    print('Hindi')
+    evaluator.compareRuns('hin_Deva')
+
