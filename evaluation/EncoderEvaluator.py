@@ -34,7 +34,8 @@ class EncoderEvaluator():
             "datasets/npi_Deva.tsv":"ne",
             "datasets/pes_Arab.tsv":"fa",
             "datasets/spa_Latn.tsv":"es",
-            "datasets/zho_Hans.tsv":"zh"
+            "datasets/zho_Hans.tsv":"zh",
+            "datasets/eng_Latn.tsv":"en",
         }
 
     def read_topic_files(self,sample_file_path):
