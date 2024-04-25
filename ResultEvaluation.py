@@ -30,7 +30,7 @@ class ResultEvaluation():
                 run = Run.from_file(result, kind="trec")
                 self.runs[result]=run
                 # The croatian results have a serious error within them, they are longer than other sets
-                temp = evaluate(qrels, run, ["precision@5","ndcg@5"],make_comparable=True) # temp is a dictionary
+                temp = evaluate(qrels, run, ["precision@5","ndcg@5"],make_comparable=True,return_mean=False) # temp is a dictionary
                 print(result)
                 print(temp)
                 
@@ -66,11 +66,32 @@ class ResultEvaluation():
                 stat_test='student',
             )
             print(result)
-        
-        
+    
+    
+    def generateQueryScores(self,resultPath:str,floresCode:str)->None:
+        invertedQrelDict=dict((v, k) for k, v in self.qrelDict.items())
+        invertedQrelDictKeys=invertedQrelDict.keys()
+        resultFiles=[file for file in os.listdir(resultPath) if floresCode in file]
+        fullQrelIDS=[]
+        fullResults=[]
+        for qrelKey,resultFile in zip(invertedQrelDictKeys,resultFiles):
+            qrels = Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[qrelKey]}', kind="trec")
+            qrels.set_relevance_level(self.relevanceLevel)
+            print(qrels.get_query_ids())
+            run = Run.from_file(f'{resultPath}/{resultFile}', kind="trec")
+            temp = evaluate(qrels, run, ["precision@10"],make_comparable=True,return_mean=False) # temp is a dictionary
+            fullResults.extend(temp)
+            fullQrelIDS.extend(qrels.get_query_ids())
+        if not os.path.exists('evaluation/precisions'):
+            os.mkdir('evaluation/precisions')
+        with open(f'evaluation/precisions/{floresCode}_precision.tsv','w',encoding='utf-8') as precisionTsv:
+            for id,score in zip(fullQrelIDS,fullResults):
+                precisionTsv.write(f'{id}\t{score}\n')
+            
     
 if __name__=="__main__":
     evaluator= ResultEvaluation('evaluation/qrels','evaluation/ndcg',relevanceLevel=2)
+  
     evaluator.evaluate('evaluation/mbartbi')
     evaluator.evaluate('evaluation/mbartcross')
     evaluator.evaluate('evaluation/nllbbi')
@@ -89,3 +110,7 @@ if __name__=="__main__":
     print('Hindi')
     evaluator.compareRuns('hin_Deva')
 
+    evaluator.generateQueryScores('evaluation/mbartbi','ces_Latn')
+    evaluator.generateQueryScores('evaluation/mbartbi','hrv_Latn')
+    evaluator.generateQueryScores('evaluation/mbartbi','spa_Latn')
+    evaluator.generateQueryScores('evaluation/mbartbi','pes_Arab')
