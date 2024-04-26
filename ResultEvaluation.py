@@ -85,11 +85,25 @@ class ResultEvaluation():
         with open(f'evaluation/precisions/{floresCode}_precision.tsv','w',encoding='utf-8') as precisionTsv:
             for id,score in zip(fullQrelIDS,fullResults):
                 precisionTsv.write(f'{id}\t{score}\n')
+                
+    def calculateAverageAssessementForQrels(self)->int:
+        numCounted=0
+        countDict={}
+        for file in os.listdir(self.qrelsPath):
+            with open(f'{self.qrelsPath}/{file}','r',encoding='utf-8') as qrel:
+                for line in qrel.readlines():
+                    line=line.split('\t')
+                    numCounted+=1
+                    if countDict.get(line[0])==None:
+                        countDict[line[0]]=1
+                        continue
+                    countDict[line[0]]+=1
+        return numCounted//len(countDict.keys())
             
     
 if __name__=="__main__":
     evaluator= ResultEvaluation('evaluation/qrels','evaluation/ndcg',relevanceLevel=2)
-  
+    print(f'Average Number Of Assessments per question in the Qrel Corpus: {evaluator.calculateAverageAssesementForQrels()}')
     evaluator.evaluate('evaluation/mbartbi')
     evaluator.evaluate('evaluation/mbartcross')
     evaluator.evaluate('evaluation/nllbbi')
