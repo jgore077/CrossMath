@@ -30,8 +30,9 @@ class ResultEvaluation():
                 run = Run.from_file(result, kind="trec")
                 self.runs[result]=run
                 # The croatian results have a serious error within them, they are longer than other sets
-                temp = evaluate(qrels, run, ["precision@5","ndcg@5"],make_comparable=True,return_mean=False) # temp is a dictionary
-                
+                temp = evaluate(qrels, run, ["precision@5","ndcg@5"],make_comparable=True) # temp is a dictionary
+                print(result)
+                print(temp)
                 
     # Deprecated but not removing as it provides some extra information
     def compareRuns(self,modelName:str,compareModel:str):
@@ -103,7 +104,7 @@ class ResultEvaluation():
     
 if __name__=="__main__":
     evaluator= ResultEvaluation('evaluation/qrels','evaluation/ndcg',relevanceLevel=2)
-    print(f'Average Number Of Assessments per question in the Qrel Corpus: {evaluator.calculateAverageAssesementForQrels()}')
+    print(f'Average Number Of Assessments per question in the Qrel Corpus: {evaluator.calculateAverageAssessementForQrels()}')
     evaluator.evaluate('evaluation/mbartbi')
     evaluator.evaluate('evaluation/mbartcross')
     evaluator.evaluate('evaluation/nllbbi')
@@ -126,7 +127,8 @@ if __name__=="__main__":
     print('Hindi')
     evaluator.compareRuns('hin_Deva')
 
-    evaluator.generateQueryScores('evaluation/mbartbi','ces_Latn')
-    evaluator.generateQueryScores('evaluation/mbartbi','hrv_Latn')
-    evaluator.generateQueryScores('evaluation/mbartbi','spa_Latn')
-    evaluator.generateQueryScores('evaluation/mbartbi','pes_Arab')
+    evaluator.generateQueryScores('evaluation/nllbbi','ces_Latn')
+    evaluator.generateQueryScores('evaluation/nllbbi','hrv_Latn')
+    evaluator.generateQueryScores('evaluation/nllbbi','spa_Latn')
+    evaluator.generateQueryScores('evaluation/nllbbi','pes_Arab')
+    evaluator.generateQueryScores('evaluation/nllbbi','eng_Latn')
