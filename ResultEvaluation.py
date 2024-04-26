@@ -31,8 +31,7 @@ class ResultEvaluation():
                 self.runs[result]=run
                 # The croatian results have a serious error within them, they are longer than other sets
                 temp = evaluate(qrels, run, ["precision@5","ndcg@5"],make_comparable=True,return_mean=False) # temp is a dictionary
-                print(result)
-                print(temp)
+                
                 
     # Deprecated but not removing as it provides some extra information
     def compareRuns(self,modelName:str,compareModel:str):
@@ -77,7 +76,6 @@ class ResultEvaluation():
         for qrelKey,resultFile in zip(invertedQrelDictKeys,resultFiles):
             qrels = Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[qrelKey]}', kind="trec")
             qrels.set_relevance_level(self.relevanceLevel)
-            print(qrels.get_query_ids())
             run = Run.from_file(f'{resultPath}/{resultFile}', kind="trec")
             temp = evaluate(qrels, run, ["precision@10"],make_comparable=True,return_mean=False) # temp is a dictionary
             fullResults.extend(temp)
