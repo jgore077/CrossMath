@@ -34,7 +34,8 @@ class EncoderEvaluator():
             "datasets/npi_Deva.tsv":"ne",
             "datasets/pes_Arab.tsv":"fa",
             "datasets/spa_Latn.tsv":"es",
-            "datasets/zho_Hans.tsv":"zh"
+            "datasets/zho_Hans.tsv":"zh",
+            "datasets/eng_Latn.tsv":"en",
         }
 
     def read_topic_files(self,sample_file_path):
@@ -140,7 +141,7 @@ class EncoderEvaluator():
                 rank = 1
                 for post_id in result_map:
                     score = result_map[post_id]
-                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), f'{self.translationModelName}-{self.encoderString.split('/')[1]}'])
+                    csv_writer.writerow([topic_id, "0", post_id, str(rank), str(score), f'{self.translationModelName}-{self.encoderString.split("/")[1]}'])
                     rank += 1
                     if rank > 1000:
                         break

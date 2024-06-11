@@ -66,16 +66,54 @@ class ResultEvaluation():
                 stat_test='student',
             )
             print(result)
-        
-        
+    
+    
+    def generateQueryScores(self,resultPath:str,floresCode:str)->None:
+        invertedQrelDict=dict((v, k) for k, v in self.qrelDict.items())
+        invertedQrelDictKeys=invertedQrelDict.keys()
+        resultFiles=[file for file in os.listdir(resultPath) if floresCode in file]
+        fullQrelIDS=[]
+        fullResults=[]
+        for qrelKey,resultFile in zip(invertedQrelDictKeys,resultFiles):
+            qrels = Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[qrelKey]}', kind="trec")
+            qrels.set_relevance_level(self.relevanceLevel)
+            run = Run.from_file(f'{resultPath}/{resultFile}', kind="trec")
+            temp = evaluate(qrels, run, ["precision@10"],make_comparable=True,return_mean=False) # temp is a dictionary
+            fullResults.extend(temp)
+            fullQrelIDS.extend(qrels.get_query_ids())
+        if not os.path.exists('evaluation/precisions'):
+            os.mkdir('evaluation/precisions')
+        with open(f'evaluation/precisions/{floresCode}_precision.tsv','w',encoding='utf-8') as precisionTsv:
+            for id,score in zip(fullQrelIDS,fullResults):
+                precisionTsv.write(f'{id}\t{score}\n')
+                
+    def calculateAverageAssessementForQrels(self)->int:
+        numCounted=0
+        countDict={}
+        for file in os.listdir(self.qrelsPath):
+            with open(f'{self.qrelsPath}/{file}','r',encoding='utf-8') as qrel:
+                for line in qrel.readlines():
+                    line=line.split('\t')
+                    numCounted+=1
+                    if countDict.get(line[0])==None:
+                        countDict[line[0]]=1
+                        continue
+                    countDict[line[0]]+=1
+        return numCounted//len(countDict.keys())
+            
     
 if __name__=="__main__":
     evaluator= ResultEvaluation('evaluation/qrels','evaluation/ndcg',relevanceLevel=2)
+    print(f'Average Number Of Assessments per question in the Qrel Corpus: {evaluator.calculateAverageAssessementForQrels()}')
     evaluator.evaluate('evaluation/mbartbi')
     evaluator.evaluate('evaluation/mbartcross')
     evaluator.evaluate('evaluation/nllbbi')
     evaluator.evaluate('evaluation/nllbcross')
     
+    print('English (Baseline)')
+    evaluator.compareRuns('eng_Latn')
+    print('Czech')
+    evaluator.compareRuns('ces_Latn')
     print('Czech')
     evaluator.compareRuns('ces_Latn')
     print('Croatian')
@@ -89,3 +127,8 @@ if __name__=="__main__":
     print('Hindi')
     evaluator.compareRuns('hin_Deva')
 
+    evaluator.generateQueryScores('evaluation/nllbbi','ces_Latn')
+    evaluator.generateQueryScores('evaluation/nllbbi','hrv_Latn')
+    evaluator.generateQueryScores('evaluation/nllbbi','spa_Latn')
+    evaluator.generateQueryScores('evaluation/nllbbi','pes_Arab')
+    evaluator.generateQueryScores('evaluation/nllbbi','eng_Latn')
