@@ -72,13 +72,16 @@ class ResultEvaluation():
         invertedQrelDict=dict((v, k) for k, v in self.qrelDict.items())
         invertedQrelDictKeys=invertedQrelDict.keys()
         resultFiles=[file for file in os.listdir(resultPath) if floresCode in file]
+        # Sort based on which arqmath set to match with invertedQrelDictKeys
+        # 'a1'<'a2'==True
+        resultFiles.sort(key=lambda file: file[-6:-4])
         fullQrelIDS=[]
         fullResults=[]
         for qrelKey,resultFile in zip(invertedQrelDictKeys,resultFiles):
             qrels = Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[qrelKey]}', kind="trec")
             qrels.set_relevance_level(self.relevanceLevel)
             run = Run.from_file(f'{resultPath}/{resultFile}', kind="trec")
-            temp = evaluate(qrels, run, ["precision@10"],make_comparable=True,return_mean=False) # temp is a dictionary
+            temp = evaluate(qrels, run, ["precision@10"],make_comparable=False,return_mean=False) # temp is a dictionary
             fullResults.extend(temp)
             fullQrelIDS.extend(qrels.get_query_ids())
         if not os.path.exists('evaluation/precisions'):
