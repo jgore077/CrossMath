@@ -70,11 +70,11 @@ class EncoderEvaluator():
     def read_corpus(self,topic_tsv_path):
         candidates = {}
         queries = self.read_topic_files(topic_tsv_path)
-        candidate_answer_file = "evaluation/qrel_task1_2020.tsv"
+        candidate_answer_file = "evaluation/qrels/qrel_task1_2020.tsv"
         dic_candidates = self.read_qrel_files(candidate_answer_file)
-        candidate_answer_file = "evaluation/qrel_task1_2021.tsv"
+        candidate_answer_file = "evaluation/qrels/qrel_task1_2021.tsv"
         dic_candidates.update(self.read_qrel_files(candidate_answer_file))
-        candidate_answer_file = "evaluation/qrel_task1_2022.tsv"
+        candidate_answer_file = "evaluation/qrels/qrel_task1_2022.tsv"
         dic_candidates.update(self.read_qrel_files(candidate_answer_file))
 
         for topic in dic_candidates:
