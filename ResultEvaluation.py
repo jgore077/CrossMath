@@ -13,6 +13,11 @@ class ResultEvaluation():
             'qrel_task1_2021.tsv':'a2',
             'qrel_task1_2022.tsv':'a3',
         }
+        self.ARQMathNameDict={
+            'a1':"ARQMath 1",
+            'a2':"ARQMath 2",
+            'a3':"ARQMath 3",
+        }
         
         self.relevanceLevel=relevanceLevel
         self.runs={
@@ -34,28 +39,13 @@ class ResultEvaluation():
                 print(result)
                 print(temp)
                 
-    # Deprecated but not removing as it provides some extra information
-    def compareRuns(self,modelName:str,compareModel:str):
-        keys=[key for key in self.runs.keys() if modelName in key]
-        invertedQrelDict=dict((v, k) for k, v in self.qrelDict.items())
-        for key in keys:
-            # print(f'{self.qrelsPath}/{invertedQrelDict[Path(key).stem[-2:]]}')
-            # print(key,f'{compareModel}/{os.path.basename(key)}')
-            result=compare(
-                qrels=Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[Path(key).stem[-2:]]}',kind="trec"),
-                runs=[self.runs[key],self.runs[f'{compareModel}/{os.path.basename(key)}']],
-                metrics=["precision@10", "ndcg@10"],
-                max_p=0.05,
-                stat_test='student',
-            )
-            print(result)
-        
+ 
     def compareRuns(self,floresCode:str)->None:
         keys=[key for key in self.runs.keys() if floresCode in key]
         invertedQrelDict=dict((v, k) for k, v in self.qrelDict.items())
         invertedQrelDictKeys=invertedQrelDict.keys()
         for arqMathCode in invertedQrelDictKeys:
-            test=[self.runs[key] for key in keys if arqMathCode in key]
+            print(self.ARQMathNameDict[arqMathCode])
             qrel=Qrels.from_file(f'{self.qrelsPath}/{invertedQrelDict[arqMathCode]}',kind="trec")
             qrel.set_relevance_level(self.relevanceLevel)
             result=compare(
